@@ -1,0 +1,34 @@
+import numpy as np
+
+def order_crossover(parent1, parent2):
+    size = len(parent1)
+    # Create empty offspring with placeholder values
+    offspring = np.full(size, -1, dtype=parent1.dtype)
+
+    # Select crossover points
+    crossover_point1 = np.random.randint(0, size)
+    crossover_point2 = np.random.randint(0, size)
+
+    if crossover_point1 > crossover_point2:
+        crossover_point1, crossover_point2 = crossover_point2, crossover_point1
+
+    # Insert the slice from parent1 into the offspring
+    offspring[crossover_point1:crossover_point2] = parent1[crossover_point1:crossover_point2]
+
+    # Fill the remaining positions with the genes from parent2
+    offspring_pos = crossover_point2
+    for gene in parent2:
+        if gene not in offspring:
+            if offspring_pos >= size:
+                offspring_pos = 0
+            offspring[offspring_pos] = gene
+            offspring_pos += 1
+            
+    return offspring
+
+# Test the function
+parent1 = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
+parent2 = np.array([9, 3, 7, 8, 2, 6, 5, 1, 4])
+
+offspring = order_crossover(parent1, parent2)
+print("Offspring: ", offspring)
